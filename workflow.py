@@ -1,19 +1,27 @@
-from chatbot import detect_query_type
-from news_api import get_news
-from duckduckgo_search import DDGS
-
 def get_general_answer(query):
-    try:
-        results = DDGS().text(query, max_results=2)
-        return "\n".join([r["body"] for r in results])
-    except:
-        return "Sorry, couldn't fetch answer."
+    query_lower = query.lower()
 
-def process_query(query, category):
-    if detect_query_type(query) == "news":
-        try:
-            return get_news(category)
-        except:
-            return "⚠️ News API failed."
+    # Full forms
+    if "full form of cpu" in query_lower:
+        return "CPU stands for Central Processing Unit."
+
+    elif "full form of ram" in query_lower:
+        return "RAM stands for Random Access Memory."
+
+    elif "full form of ai" in query_lower:
+        return "AI stands for Artificial Intelligence."
+
+    # Definitions
+    elif "ai" in query_lower or "artificial intelligence" in query_lower:
+        return "Artificial Intelligence (AI) is the simulation of human intelligence in machines."
+
+    elif "python" in query_lower:
+        return "Python is a high-level programming language used in web development, data science, and AI."
+
+    # General fallback
+    elif "what is" in query_lower:
+        topic = query_lower.replace("what is", "").strip()
+        return f"{topic.capitalize()} is an important concept in technology or general knowledge."
+
     else:
-        return get_general_answer(query)
+        return f"{query.capitalize()} is a commonly discussed topic related to technology or general knowledge."
